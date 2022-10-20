@@ -7,7 +7,7 @@ from scipy.integrate import solve_ivp
 from utilities.odes import dm_dt
 from utilities.func_rk4 import rk4
 from utilities.euler_method import euler_method
-# from utilities.emissions import emissions
+# from solvers.emissions import emissions
 
 
 def plot_integrator_results(title_string, args: tuple):
