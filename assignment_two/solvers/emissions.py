@@ -14,22 +14,15 @@ def emissions(yr, model):
     """
     yr = np.asarray(yr)
     if model == "short_sine": # short wavelength sine wave forcing
-        T = 0.1
-        e = (20 / T) * (np.sin((2*np.pi*yr) / T))
-    elif model == "long_sine":
-        T = 100
-        e = (20 / T) * (np.sin((2*np.pi*yr) / T)) # long wavelength sine wave forcing
-    elif model == "short_exp":
-        T = 0.1
-        e = np.exp(-yr/2100) * (np.sin((2*np.pi*yr) / T))  # short wavelength exponential decay
+        # do model one
+        pass
     elif model == "long_exp":
-        T = 100  # long wavelength
-        e = np.exp(-yr/2100) * (np.sin((2*np.pi*yr) / T))  # long wavelength exponential decay
+        # do model two
+        pass
     else:
         # get model data from pandas dataframe
-        t_yr = df[model + "_times"]
-        e_GtC_yr = df[model + "_emissions"]
+        pass
         # interpolate yr from model data
-        e = np.interp(yr, t_yr, e_GtC_yr)
+        # e = np.interp(yr, t_yr, e_GtC_yr)
 
-    return e
+    return  # e
