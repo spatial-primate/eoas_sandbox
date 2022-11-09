@@ -5,12 +5,12 @@ from data.constants import *
 
 
 def dtemperature_dtime(time: float, temperatures: np.ndarray,
-                       volcano_model=None, compute_couplings=True):
+                       volcano_model=None, compute_couplings=False):
     """
     inputs:
     t: scalar time, y'know?
     temperature_array: zonally-averaged surface temperature (1 by 6)
-    volcano_model: reference model of volcanic forcing
+    volcano_models: reference model of volcanic forcing
     compute_couplings: choice to compute without inter-zonal heat transfer
 
     returns:
@@ -33,12 +33,12 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
 
         # compute transfer couplings between zones
         # todo: is this producing bad graphs?
-        k_matrix = np.array([[0, -1e7*20015000, 0, 0, 0, 0],
-                             [-1e7*20015000, 0, -1e7*34667000, 0, 0, 0],
-                             [0, -1e7*34667000, 0, -1e7*40030000, 0, 0],
-                             [0, 0, -1e7*40030000, 0, -5e7*34667000, 0],
-                             [0, 0, 0, -5e7*34667000, 0, -1e7*20015000],
-                             [0, 0, 0, 0, -1e7*20015000, 0]]
+        k_matrix = np.array([[0, 1e7 * 20015000, 0, 0, 0, 0],
+                             [-1e7 * 20015000, 0, 1e7 * 34667000, 0, 0, 0],
+                             [0, -1e7 * 34667000, 0, 1e7 * 40030000, 0, 0],
+                             [0, 0, -1e7 * 40030000, 0, 5e7 * 34667000, 0],
+                             [0, 0, 0, -5e7 * 34667000, 0, 1e7 * 20015000],
+                             [0, 0, 0, 0, -1e7 * 20015000, 0]]
                             )
 
         couplings = np.dot(k_matrix, temperatures)
@@ -53,6 +53,7 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
     couplings = np.multiply(coupling_prefactors, couplings)
 
     # Update values for fluxes from new temperatures:
+    # todo: time-dependent albedo_sky term will plug-in here:
     step1 = np.multiply(gamma.reshape(6), (1 - albedo_sky))
     step2 = np.multiply(step1, (1 - albedo_surface))
     flux_in = np.multiply(step2, S_0)
@@ -61,8 +62,8 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
     dtemperature = noncoupling_prefactors * (flux_in - flux_out) + couplings
 
     # todo: volcano-climate addition
-    # if volcano_model:
-    #     emission_array = emissions([time], model=volcano_model)[0]
+    # if volcano_models:
+    #     emission_array = emissions([time], model=volcano_models)[0]
     # else:
     #     emission_array = 0
 
@@ -71,12 +72,13 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
 
     return dtemperature
 
+
 # for debugging standalone
 # time = 1.0
 # temperature0 = np.zeros([6, ])
 # dtemperature_dtime(time, temperature0, compute_couplings=True)
 
 
-def albedo_sky_stepwise(time: float, t_onset = False):
-  a = ':)'
-  return a
+def albedo_sky_stepwise(time: float, t_onset=False):
+    a = ':)'
+    return a
