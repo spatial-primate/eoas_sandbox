@@ -2,11 +2,11 @@ import numpy as np
 from solvers.plotters import plot_integrator_results
 
 title_string = "steady-state, couplings"
-filename_string = "steadystate_coupling_test1"
-initial_temperatures = 288 * np.ones([6, 1])  # avg temp today: 288 K
-coefficients = np.ones([6, 1])
+filename_string = "steadystate_coupling_T0_1Kelvin_v1"
+initial_temperatures = 288 * np.ones((6,))  # avg temp today: 288 K
+coefficients = np.ones((6,))
 volcano_model = [None]  # can iterate over [None]
-solvers = ['DOP853']  # 'LSODA', cut-paste if desired
+solvers = ['LSODA']  # 'DOP853', cut-paste if desired
 compute_couplings = True
 
 

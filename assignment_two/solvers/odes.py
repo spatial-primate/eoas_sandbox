@@ -17,7 +17,7 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
     dtemperature_dtime: (1 by 6) vector of changes to temperature
     """
 
-    # compute pre-factor on temperature
+    # compute pre-factor on temperature term
     # sigma and tau are constant, epsilon usually just 1 (one)
     b = sigma * tau * epsilon
 
@@ -28,23 +28,27 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
     if compute_couplings:
         coupling_prefactors = np.divide(1,
                                         area.reshape(6) * densities * thermals * specific_heats)
-        # couplings_plus = np.ndarray((6, 1))
-        # couplings_minus = np.ndarray((6, 1))
+        couplings_plus = np.zeros((6,))
+        couplings_minus = np.zeros((6,))
 
         # transfer couplings between zones saved as csv read in in constants
-        # todo: is this producing bad graphs? 
+        # todo: is this producing bad graphs?
+        # couplings = np.dot(k_matrix, temperatures)
 
-        couplings = np.dot(k_matrix, temperatures)
-        # for zone in range(0, 6):
-        #     couplings_plus[zone] = k[zone] * L[zone] * (temperatures[zone + 1] - temperatures[zone])
-        #     couplings_minus[zone + 1] = k[zone] * L[zone] * (temperatures[zone + 1] - temperatures[zone])
+        # do the north and south separately cuz they're different
+        couplings_plus[0] = k[0] * L[0] * (temperatures[1] - temperatures[0])
+        couplings_minus[5] = k[4] * L[4] * (temperatures[5] - temperatures[4])
+        # now compute the inner zones:
+        for zone in range(1, 4):
+            couplings_plus[zone] = k[zone] * L[zone] * (temperatures[zone + 1] - temperatures[zone])
+            couplings_minus[zone] = k[zone - 1] * L[zone - 1] * (temperatures[zone] - temperatures[zone - 1])
+        couplings = couplings_plus - couplings_minus
     else:  # ignore heat transfer between zones
         couplings = 0.0
         coupling_prefactors = 0.0
 
     # scale couplings by zonally-averaged prefactors
     couplings = np.multiply(coupling_prefactors, couplings)
-    # print(couplings)
 
     # Update values for fluxes from new temperatures:
     # todo: time-dependent albedo_sky term will plug-in here:
