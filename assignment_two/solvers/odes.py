@@ -75,3 +75,8 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
 # time = 1.0
 # temperature0 = np.zeros([6, ])
 # dtemperature_dtime(time, temperature0, compute_couplings=True)
+
+
+def albedo_sky_stepwise(time: float, t_onset = False):
+  a = ':)'
+  return a
