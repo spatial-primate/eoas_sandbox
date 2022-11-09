@@ -40,7 +40,7 @@ frac_w6 = 0.3
 frac_i6 = 0.5
 a_avg6 = (frac_s6*a_land)+(frac_w6*a_water)+(frac_i6*a_ice) #Average albedo for zone 6
 
-#Alternating Zone 6 into 6.1 and 6.2 with different artic circle latitudes (60-90 deg N)
+#Alternating Zone 6 into 6.1 and 6.2 with different arctic circle latitudes (60-90 deg N)
 #Zone 6.1 fractions (60-75 deg N)
 frac_s61= 0.25
 frac_w61 = 0.55

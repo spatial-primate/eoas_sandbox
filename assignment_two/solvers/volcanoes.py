@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
 
-# model data stored in a csv
-df = pd.read_csv("./data/model-data.csv")
+
+# todo: model data stored in a csv
+# df = pd.read_csv("./data/model-data.csv")
 
 
 def emissions(yr, model):
