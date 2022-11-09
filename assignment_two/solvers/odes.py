@@ -31,15 +31,8 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
         # couplings_plus = np.ndarray((6, 1))
         # couplings_minus = np.ndarray((6, 1))
 
-        # compute transfer couplings between zones
-        # todo: is this producing bad graphs?
-        k_matrix = np.array([[0, 1e7 * 20015000, 0, 0, 0, 0],
-                             [-1e7 * 20015000, 0, 1e7 * 34667000, 0, 0, 0],
-                             [0, -1e7 * 34667000, 0, 1e7 * 40030000, 0, 0],
-                             [0, 0, -1e7 * 40030000, 0, 5e7 * 34667000, 0],
-                             [0, 0, 0, -5e7 * 34667000, 0, 1e7 * 20015000],
-                             [0, 0, 0, 0, -1e7 * 20015000, 0]]
-                            )
+        # transfer couplings between zones saved as csv read in in constants
+        # todo: is this producing bad graphs? 
 
         couplings = np.dot(k_matrix, temperatures)
         # for zone in range(0, 6):
@@ -51,6 +44,7 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
 
     # scale couplings by zonally-averaged prefactors
     couplings = np.multiply(coupling_prefactors, couplings)
+    # print(couplings)
 
     # Update values for fluxes from new temperatures:
     # todo: time-dependent albedo_sky term will plug-in here:

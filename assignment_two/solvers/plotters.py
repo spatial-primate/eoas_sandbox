@@ -64,7 +64,7 @@ def plot_integrator_results(title_string, filename_string, args: tuple):
                 ], loc="center right")
     plt.tight_layout()
 
-    fig_filename = "./plots/" + filename_string + ".png"
+    fig_filename = "plots/" + filename_string + ".png"
     plt.savefig(fig_filename)
 
     plt.show()
