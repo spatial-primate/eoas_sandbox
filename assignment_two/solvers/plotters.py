@@ -2,6 +2,8 @@ import time
 import matplotlib.pyplot as plt
 from scipy.integrate import solve_ivp
 from solvers.odes import dtemperature_dtime
+from mycolorpy import colorlist as mcp
+import numpy as np
 
 # todo: create module for volcano model:
 # from solvers.volcanoes import emissions
@@ -18,11 +20,11 @@ def plot_integrator_results(title_string, filename_string, args: tuple):
 
     y0_reshaped = initial_temperatures.reshape(6)
 
-    # setup lists to collect results for plotting
-    all_t = []
-    all_temperatures = []
-    delta_t = []
-    # plot_titles = []
+    # # setup lists to collect results for plotting
+    # all_t = []
+    # all_temperatures = []
+    # delta_t = []
+    # # plot_titles = []
 
     # Loop over each solver and emission type, and add the time array and mass array to all_t, all_M
     for solver in solvers:
@@ -36,26 +38,30 @@ def plot_integrator_results(title_string, filename_string, args: tuple):
         t = sol.t
         temperature = sol.y.T
 
-        all_t.append(t)
-        all_temperatures.append(temperature)
-        delta_t.append(t_end - t_start)  # the times taken to compute the integration
+        # all_t.append(t)
+        # all_temperatures.append(temperature)
+        # delta_t.append(t_end - t_start)  # the times taken to compute the integration
         # plot_titles.append(solver + ", " + model.replace("_", " "))
 
     # Plotting
+    # fig = plt.figure(figsize=(9, 4), dpi=150)
     fig = plt.figure(figsize=(9, 4), dpi=150)
-    plt.plot(all_t[0] / 3.154e+7, all_temperatures[0] - 273.15)  # convert to years and celsius
+
+    colors=['#0900FF', '#7972FF', '#BBB7FF', '#F9B7FF', '#F264FF', '#E900FF']
+
+    for i in range(np.shape(temperature)[1]):
+        plt.plot(t / 3.154e+7, temperature[:,i] - 273.15, color = colors[i])  # convert to years and celsius
     plt.xlabel('Time (y)')
     plt.ylabel(r"Temperature ($^\degree$C)")
     # plt.title(plot_titles[0] + ", delta t = " + "{:.2E}".format(delta_t[0]) + "s")
 
     plt.suptitle(title_string)
-    fig.legend(['1S', '2S', '3S', '4N', '5N', '6N'
-                ], loc="center right")
+    fig.legend(['1', '2', '3', '4', '5', '6'
+                ], loc="center right", title='Zone')
     plt.tight_layout()
 
     fig_filename = "plots/" + filename_string + ".png"
     plt.savefig(fig_filename)
-
     plt.show()
 
 
