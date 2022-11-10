@@ -1,15 +1,7 @@
-import os.path
 import time
-
 import matplotlib.pyplot as plt
-import numpy as np
 from scipy.integrate import solve_ivp
-
 from solvers.odes import dtemperature_dtime
-
-
-# from utilities.func_rk4 import rk4
-# from utilities.euler_method import euler_method
 
 # todo: create module for volcano model:
 # from solvers.volcanoes import emissions
@@ -17,13 +9,10 @@ from solvers.odes import dtemperature_dtime
 
 def plot_integrator_results(title_string, filename_string, args: tuple):
     # Time interval for integration
-    years = 5
+    years = 12
     t_min = 0
     t_max = years * 3.154e+7  # seconds in a year (multiplied by years)
 
-    # Number of points in time array (used for rk4, euler)
-    # n = 10000
-    # todo: turn this down to understand whether it's affecting bad graphs
     max_step = 50000  # dial max_step down for stiff problems
     initial_temperatures, coefficients, compute_couplings, volcano_model, solvers = args
 

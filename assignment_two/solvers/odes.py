@@ -1,6 +1,5 @@
 # from solvers.volcanoes import emissions
 # import numpy as np
-
 from data.constants import *
 
 
@@ -32,14 +31,14 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
         couplings_minus = np.zeros((6,))
 
         # transfer couplings between zones saved as csv read in in constants
-        # todo: is this producing bad graphs?
+        # todo: is this producing bad graphs? yes.
         # couplings = np.dot(k_matrix, temperatures)
 
-        # do the north and south separately cuz they're different
+        # do the north and south separately cuz they're built different
         couplings_plus[0] = k[0] * L[0] * (temperatures[1] - temperatures[0])
-        couplings_minus[5] = k[4] * L[4] * (temperatures[5] - temperatures[4])
+        couplings_minus[-1] = k[-2] * L[-2] * (temperatures[-1] - temperatures[-2])
         # now compute the inner zones:
-        for zone in range(1, 4):
+        for zone in range(1, len(k) - 1):
             couplings_plus[zone] = k[zone] * L[zone] * (temperatures[zone + 1] - temperatures[zone])
             couplings_minus[zone] = k[zone - 1] * L[zone - 1] * (temperatures[zone] - temperatures[zone - 1])
         couplings = couplings_plus - couplings_minus
