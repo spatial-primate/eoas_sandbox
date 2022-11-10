@@ -31,17 +31,16 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
         couplings_minus = np.zeros((6,))
 
         # transfer couplings between zones saved as csv read in as constants
-        # todo: is this producing bad graphs? yes.
-        # couplings = np.dot(k_matrix, temperatures)
+        couplings = np.dot(k_matrix, temperatures)
 
-        # do the north and south separately cuz they're built different
-        couplings_plus[0] = k[0] * L[0] * (temperatures[1] - temperatures[0])
-        couplings_minus[-1] = k[-2] * L[-2] * (temperatures[-1] - temperatures[-2])
-        # now compute the inner zones:
-        for zone in range(1, len(k) - 1):
-            couplings_plus[zone] = k[zone] * L[zone] * (temperatures[zone + 1] - temperatures[zone])
-            couplings_minus[zone] = k[zone - 1] * L[zone - 1] * (temperatures[zone] - temperatures[zone - 1])
-        couplings = couplings_plus - couplings_minus
+        # # do the north and south separately cuz they're built different
+        # couplings_plus[0] = k[0] * L[0] * (temperatures[1] - temperatures[0])
+        # couplings_minus[-1] = k[-2] * L[-2] * (temperatures[-1] - temperatures[-2])
+        # # now compute the inner zones:
+        # for zone in range(1, len(k) - 1):
+        #     couplings_plus[zone] = k[zone] * L[zone] * (temperatures[zone + 1] - temperatures[zone])
+        #     couplings_minus[zone] = k[zone - 1] * L[zone - 1] * (temperatures[zone] - temperatures[zone - 1])
+        # couplings = couplings_plus - couplings_minus
     else:  # ignore heat transfer between zones
         couplings = 0.0
         coupling_prefactors = 0.0

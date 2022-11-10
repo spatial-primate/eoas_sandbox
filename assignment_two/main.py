@@ -2,8 +2,8 @@ import numpy as np
 from solvers.plotters import plot_integrator_results
 
 # model configuration
-title_string = "steady-state, couplings"
-filename_string = "steadystate_coupling"
+title_string = "equal zones: steady-state with couplings"
+filename_string = "steadystate_coupling_equal_zones"
 initial_temperatures = 288 * np.ones((6,))  # avg temp today: 288 K
 coefficients = np.ones((6,))
 volcano_model = [None]  # can iterate over [None]

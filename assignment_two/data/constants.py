@@ -29,5 +29,5 @@ thermals = np.sum((land_types * Z), axis=1)  # thermal scale depth
 df = pd.read_csv('./data/boundary_equal_zones.csv')
 k = df['k (W m-1 K-1)'].values
 L = df['L (m)'].values
-boundary_params = pd.read_csv('./data/kl_matrix_equal_zones.csv', header=None)
+boundary_params = pd.read_csv('data/kl_heat_transfer_equal_zones.csv', header=None)
 k_matrix = np.array(boundary_params)
