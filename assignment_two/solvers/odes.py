@@ -30,7 +30,7 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
         couplings_plus = np.zeros((6,))
         couplings_minus = np.zeros((6,))
 
-        # transfer couplings between zones saved as csv read in in constants
+        # transfer couplings between zones saved as csv read in as constants
         # todo: is this producing bad graphs? yes.
         # couplings = np.dot(k_matrix, temperatures)
 
@@ -72,7 +72,7 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
 
 # for debugging standalone
 # time = 1.0
-# temperature0 = np.zeros([6, ])
+# temperature0 = np.zeros((6,))
 # dtemperature_dtime(time, temperature0, compute_couplings=True)
 
 
