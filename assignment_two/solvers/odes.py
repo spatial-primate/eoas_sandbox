@@ -1,23 +1,22 @@
 # from solvers.volcanoes import emissions
 # import numpy as np
-
 from data.constants import *
 
 
 def dtemperature_dtime(time: float, temperatures: np.ndarray,
-                       volcano_model=None, compute_couplings=True):
+                       volcano_model=None, compute_couplings=False):
     """
     inputs:
     t: scalar time, y'know?
     temperature_array: zonally-averaged surface temperature (1 by 6)
-    volcano_model: reference model of volcanic forcing
+    volcano_models: reference model of volcanic forcing
     compute_couplings: choice to compute without inter-zonal heat transfer
 
     returns:
     dtemperature_dtime: (1 by 6) vector of changes to temperature
     """
 
-    # compute pre-factor on temperature
+    # compute pre-factor on temperature term
     # sigma and tau are constant, epsilon usually just 1 (one)
     b = sigma * tau * epsilon
 
@@ -28,23 +27,21 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
     if compute_couplings:
         coupling_prefactors = np.divide(1,
                                         area.reshape(6) * densities * thermals * specific_heats)
-        # couplings_plus = np.ndarray((6, 1))
-        # couplings_minus = np.ndarray((6, 1))
+        couplings_plus = np.zeros((6,))
+        couplings_minus = np.zeros((6,))
 
-        # compute transfer couplings between zones
-        # todo: is this producing bad graphs?
-        k_matrix = np.array([[0, 1e7 * 20015000, 0, 0, 0, 0],
-                             [-1e7 * 20015000, 0, 1e7 * 34667000, 0, 0, 0],
-                             [0, -1e7 * 34667000, 0, 1e7 * 40030000, 0, 0],
-                             [0, 0, -1e7 * 40030000, 0, 5e7 * 34667000, 0],
-                             [0, 0, 0, -5e7 * 34667000, 0, 1e7 * 20015000],
-                             [0, 0, 0, 0, -1e7 * 20015000, 0]]
-                            )
+        # transfer couplings between zones saved as csv read in as constants
+        # todo: is this producing bad graphs? yes.
+        # couplings = np.dot(k_matrix, temperatures)
 
-        couplings = np.dot(k_matrix, temperatures)
-        # for zone in range(0, 6):
-        #     couplings_plus[zone] = k[zone] * L[zone] * (temperatures[zone + 1] - temperatures[zone])
-        #     couplings_minus[zone + 1] = k[zone] * L[zone] * (temperatures[zone + 1] - temperatures[zone])
+        # do the north and south separately cuz they're built different
+        couplings_plus[0] = k[0] * L[0] * (temperatures[1] - temperatures[0])
+        couplings_minus[-1] = k[-2] * L[-2] * (temperatures[-1] - temperatures[-2])
+        # now compute the inner zones:
+        for zone in range(1, len(k) - 1):
+            couplings_plus[zone] = k[zone] * L[zone] * (temperatures[zone + 1] - temperatures[zone])
+            couplings_minus[zone] = k[zone - 1] * L[zone - 1] * (temperatures[zone] - temperatures[zone - 1])
+        couplings = couplings_plus - couplings_minus
     else:  # ignore heat transfer between zones
         couplings = 0.0
         coupling_prefactors = 0.0
@@ -62,8 +59,8 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
     dtemperature = noncoupling_prefactors * (flux_in - flux_out) + couplings
 
     # todo: volcano-climate addition
-    # if volcano_model:
-    #     emission_array = emissions([time], model=volcano_model)[0]
+    # if volcano_models:
+    #     emission_array = emissions([time], model=volcano_models)[0]
     # else:
     #     emission_array = 0
 
@@ -75,7 +72,7 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
 
 # for debugging standalone
 # time = 1.0
-# temperature0 = np.zeros([6, ])
+# temperature0 = np.zeros((6,))
 # dtemperature_dtime(time, temperature0, compute_couplings=True)
 
 
