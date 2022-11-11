@@ -22,8 +22,8 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
     noncoupling_prefactors = np.divide(1,
                                        densities * thermals * specific_heats
                                        )
-
     # Update values for fluxes from new temperatures:
+    # todo: pickle the flux-in to save on computation
     # todo: time-dependent albedo_sky term will plug-in here:
     step1 = np.multiply(gamma.reshape(6), (1 - albedo_sky))
     step2 = np.multiply(step1, (1 - albedo_surface))
@@ -34,22 +34,8 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
         coupling_prefactors = np.divide(1,
                                         area.reshape(6) * densities * thermals * specific_heats
                                         )
-
-        # transfer couplings between zones saved as csv read in as constants
+        # transfer couplings between zones saved as csv, read in as constants
         couplings = np.dot(k_matrix, temperatures)
-
-        # relic
-        # couplings_plus = np.zeros((6,))
-        # couplings_minus = np.zeros((6,))
-
-        # # do the north and south separately cuz they're built different
-        # couplings_plus[0] = k[0] * L[0] * (temperatures[1] - temperatures[0])
-        # couplings_minus[-1] = k[-2] * L[-2] * (temperatures[-1] - temperatures[-2])
-        # # now compute the inner zones:
-        # for zone in range(1, len(k) - 1):
-        #     couplings_plus[zone] = k[zone] * L[zone] * (temperatures[zone + 1] - temperatures[zone])
-        #     couplings_minus[zone] = k[zone - 1] * L[zone - 1] * (temperatures[zone] - temperatures[zone - 1])
-        # couplings = couplings_plus - couplings_minus
 
     else:  # ignore heat transfer between zones
         couplings = 0.0
@@ -57,11 +43,11 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
 
     # scale couplings by zonally-averaged prefactors
     couplings = np.multiply(coupling_prefactors, couplings)
-
+    # finally, calculate change in temperature
     dtemperature = noncoupling_prefactors * (flux_in - flux_out) + couplings
 
     # todo: volcano-climate addition
-    # if volcano_models:
+    # if volcano_model is not None:
     #     emission_array = emissions([time], model=volcano_models)[0]
     # else:
     #     emission_array = 0
