@@ -4,7 +4,7 @@ from data.constants import *
 
 
 def dtemperature_dtime(time: float, temperatures: np.ndarray,
-                       volcano_model=None, compute_couplings=False):
+                       volcano_model=None, compute_couplings=False, sky_reflects=False):
     """
     inputs:
     t: scalar time, y'know?
@@ -53,7 +53,13 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
     step1 = np.multiply(gamma.reshape(6), (1 - albedo_sky))
     step2 = np.multiply(step1, (1 - albedo_surface))
     flux_in = np.multiply(step2, S_0)
-    flux_out = np.multiply(b, temperatures ** 4)
+    
+    # Case where the second term is altered to trap radiation reflected from surface
+    if sky_reflects:
+        step1 = np.multiply(b, temperatures ** 4)
+        flux_out = np.multiply(step1, (1 - albedo_sky)**2)
+    else: 
+        flux_out = (np.multiply(b, temperatures ** 4))*0.8
 
     dtemperature = noncoupling_prefactors * (flux_in - flux_out) + couplings
 
