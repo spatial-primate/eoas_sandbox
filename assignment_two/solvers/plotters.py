@@ -16,7 +16,7 @@ def plot_integrator_results(title_string, filename_string, args: tuple):
     t_max = years * 3.154e+7  # seconds in a year (multiplied by years)
 
     max_step = 50000  # dial max_step down for stiff problems
-    initial_temperatures, coefficients, compute_couplings, volcano_model, solvers, sky_reflects = args
+    initial_temperatures, coefficients, compute_couplings, volcano_model, volcano_onset, volcano_duration, solvers, snowball_scenario = args
 
     y0_reshaped = initial_temperatures.reshape(6)
 
@@ -32,7 +32,8 @@ def plot_integrator_results(title_string, filename_string, args: tuple):
         t_start = time.time()
         sol = solve_ivp(fun=dtemperature_dtime, t_span=(t_min, t_max),
                         y0=y0_reshaped, method=solver, max_step=max_step,
-                        args=(volcano_model, compute_couplings)
+                        args=(volcano_model, volcano_onset, volcano_duration,
+                         compute_couplings, snowball_scenario)
                         )
         t_end = time.time()
         t = sol.t
@@ -61,7 +62,7 @@ def plot_integrator_results(title_string, filename_string, args: tuple):
    # plt.tight_layout()
 
     fig_filename = "plots/" + filename_string + ".png"
-    plt.savefig(fig_filename, bbox_inches='tight')
+    # plt.savefig(fig_filename, bbox_inches='tight')
     plt.show()
 
 

@@ -1,16 +1,21 @@
-# from solvers.volcanoes import emissions
-# import numpy as np
+from solvers.volcanoes import volcanic_clouds
+from solvers.volcanoes import snowball_surface
 from data.constants import *
+# import numpy as np
 
 
 def dtemperature_dtime(time: float, temperatures: np.ndarray,
-                       volcano_model=None, compute_couplings=False, sky_reflects=False):
+                       volcano_model=None, volcano_onset = 10, volcano_duration = 2,
+                        compute_couplings=False, snowball_scenario = False):
     """
     inputs:
     t: scalar time, y'know?
-    temperature_array: zonally-averaged surface temperature (1 by 6)
-    volcano_models: reference model of volcanic forcing
+    temperatures: zonally-averaged surface temperature (1 by 6)
+    volcano_model: reference model of volcanic forcing
+    volcano_onset: start time for volcano (years)
+    volcano_duration: lenth of volcano effect (years)
     compute_couplings: choice to compute without inter-zonal heat transfer
+    snowball_scenario: choice to flip to version of model where T<0 = ice albedo
 
     returns:
     dtemperature_dtime: (1 by 6) vector of changes to temperature
@@ -48,29 +53,26 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
     # scale couplings by zonally-averaged prefactors
     couplings = np.multiply(coupling_prefactors, couplings)
 
+
+    # # volcano-climate interaction by adding volcanic clouds to change albedo_sky
+    if volcano_model:
+        while (time >= (volcano_onset * 3.154e+7)) and (time <= ((volcano_onset + volcano_duration) * 3.154e+7)):
+            albedo_sky = volcanic_clouds(time, model=volcano_model)
+
+
+    # snowball-earth melting by changing surface albedo from ice to land/water
+    if snowball_scenario:
+        albedo_surface = snowball_surface(temperatures)
+
+
     # Update values for fluxes from new temperatures:
     # todo: time-dependent albedo_sky term will plug-in here:
     step1 = np.multiply(gamma.reshape(6), (1 - albedo_sky))
     step2 = np.multiply(step1, (1 - albedo_surface))
     flux_in = np.multiply(step2, S_0)
-    
-    # Case where the second term is altered to trap radiation reflected from surface
-    if sky_reflects:
-        step1 = np.multiply(b, temperatures ** 4)
-        flux_out = np.multiply(step1, (1 - albedo_sky)**2)
-    else: 
-        flux_out = (np.multiply(b, temperatures ** 4))*0.8
+    flux_out = (np.multiply(b, temperatures ** 4))*(1-albedo_sky) #added a term to reflect back to earth
 
     dtemperature = noncoupling_prefactors * (flux_in - flux_out) + couplings
-
-    # todo: volcano-climate addition
-    # if volcano_models:
-    #     emission_array = emissions([time], model=volcano_models)[0]
-    # else:
-    #     emission_array = 0
-
-    # add forcing fluxes to first slot: the atmosphere box
-    # dtemperature[0] += emission_array
 
     return dtemperature
 
@@ -79,8 +81,3 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
 # time = 1.0
 # temperature0 = np.zeros((6,))
 # dtemperature_dtime(time, temperature0, compute_couplings=True)
-
-
-def albedo_sky_stepwise(time: float, t_onset=False):
-    a = ':)'
-    return a
