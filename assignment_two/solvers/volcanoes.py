@@ -1,40 +1,48 @@
 import numpy as np
-import pandas as pd
+from data.constants import albedo_snowball, albedo_not_snowball
 
 
-# todo: model data stored in a csv
-# df = pd.read_csv("./data/model-data.csv")
+# volcanic_clouds causes change to albedo_sky (increase) and adds trapping to flux_out
 
-
-def emissions(yr, model):
+def volcanic_clouds(yr, model, onset=10, duration=2):
     """
-    Function defining fossil fuel emissions from various models and equations.
+    Function defining the changes produced by onset of volcanic activity
 
-    IPCC-A2 model from: http://www.grida.no/climate/ipcc/emission
-    CMIP5 model data from: https://esgf-node.llnl.gov/search/cmip5/
-    CMIP6 model data from: https://esgf-index1.ceda.ac.uk/search/cmip6/
-
-    model parameter is one of: "short_sine", "long_sine", "short_exp", "long_exp",
-        "IPCC-A2", "GFDL-ESM2G_esmrcp85", "CNRM-ESM2-1_esm-ssp585", "MPI-ESM1-2-LR_esm-ssp585", "UKESM1-0-LL_esm-ssp585"
+    model parameter is one of: "small", "medium", "large"
+    onset in years
+    duration in years
     """
     yr = np.asarray(yr)
-    if model == "short_sine": # short wavelength sine wave forcing
-        T = 0.1  
-        e = (20 / T) * (np.sin((2*np.pi*yr) / T))
-    elif model == "long_sine":
-        T = 100  
-        e = (20 / T) * (np.sin((2*np.pi*yr) / T)) # long wavelength sine wave forcing
-    elif model == "short_exp":
-        T = 0.1  
-        e = np.exp(-yr/2100) * (np.sin((2*np.pi*yr) / T))  # short wavelength exponential decay
-    elif model == "long_exp":
-        T = 100  # long wavelength
-        e = np.exp(-yr/2100) * (np.sin((2*np.pi*yr) / T))  # long wavelength exponential decay
-    else:
-        # get model data from pandas dataframe
-        t_yr = df[model + "_times"]
-        e_GtC_yr = df[model + "_emissions"]
-        # interpolate yr from model data
-        e = np.interp(yr, t_yr, e_GtC_yr)
+    if model.lower() == "small":  # small amount of volcanoes, small increase in albedo
+        albedo_sky = np.array([0.2, 0.2, 0.2, 0.2, 0.2, 0.2]) * 1.5
 
-    return e
+    elif model.lower() == "medium":
+        albedo_sky = np.array([0.2, 0.2, 0.2, 0.2, 0.2, 0.2]) * 2
+
+    elif model.lower() == "large":
+        albedo_sky = np.array([0.2, 0.2, 0.2, 0.2, 0.2, 0.2]) * 4
+    else:
+        raise ValueError(
+            "please check that volcano model is one of [None, 'small', 'medium', 'large']"
+        )
+
+    return albedo_sky
+
+
+def snowball_surface(temperatures: np.ndarray):
+    """
+    Function deciding if the surface is ice or not and defining a surface albedo 
+
+    inputs:
+    temperatures: zonally-averaged surface temperature (1 by 6)
+
+    returns:
+    albedo_surface: (1 by 6) vector of surface reflectance based off temperature
+    """
+    # loop through the 6 temperatures, if < 0 deg C, all ice, otherwise 70% water 30% land
+    # testing:
+    # temperatures = np.array([270, 270, 270, 280, 280, 280])
+    ice = (temperatures <= 273.15) * albedo_snowball  # boolean of whether temps are < 0
+    not_ice = (temperatures > 273.15) * albedo_not_snowball
+
+    return ice + not_ice
