@@ -15,13 +15,13 @@ c = np.array([790, 4187, 2060])  # specific heat capacity
 
 # calculate zonal averages
 zone_params = pd.read_csv('./data/equal_zones.csv')
-gamma = np.array(zone_params[["gamma"]])  # spatial radiation factors
+GAMMA = np.array(zone_params[["gamma"]])  # spatial radiation factors
 area = np.array(zone_params[["frac area"]] * A)
 land_types = np.array(zone_params[["land", "ocean", "ice"]])
-albedo_surface = np.sum((land_types * alpha), axis=1)  # surface albedos 
-albedo_snowball = np.ones(6)*alpha[2] #all zones ice
-albedo_not_snowball = np.ones(6)*((alpha[0]*0.3) + (alpha[1]*0.7)) #70perc water 30perc land
-albedo_sky = np.ones(6)*0.2
+ALBEDO_SURFACE = np.sum((land_types * alpha), axis=1)  # surface albedos
+albedo_snowball = np.ones(6)*alpha[2]  # all zones ice
+albedo_not_snowball = np.ones(6)*((alpha[0]*0.3) + (alpha[1]*0.7))  # 70perc water 30perc land
+ALBEDO_SKY = np.ones(6)*0.2
 densities = np.sum((land_types * rho), axis=1)  # densities
 specific_heats = np.sum((land_types * c), axis=1)  # specific heat capacities (c_k)
 thermals = np.sum((land_types * Z), axis=1)  # thermal scale depth
