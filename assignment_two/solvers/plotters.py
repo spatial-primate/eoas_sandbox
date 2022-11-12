@@ -12,6 +12,7 @@ def plot_integrator_results(title_string, filename_string, args: tuple):
     t_max = years * 3.154e+7  # seconds in a year (multiplied by years)
 
     max_step = 50000  # dial max_step down for stiff problems
+
     # unpack args to pass to solver, dT/dt, and plotter
     initial_temperatures, coefficients, compute_couplings, \
         volcano_model, volcano_onset, volcano_duration, solvers, \

@@ -17,7 +17,7 @@ snowball_scenario = True
 volcano_model = 'medium'  # can iterate over [None, 'small', 'medium', 'large']
 volcano_onset = 1.5  # in years after start
 volcano_duration = 1.5  # in years
-# unequal zones
+# todo: unequal zones
 unequal_zones = False
 
 
