@@ -1,7 +1,5 @@
 from solvers.volcanoes import volcanic_clouds, snowball_surface
 from data.constants import *
-
-
 # todo: unequal zones parameters (read from file?)
 
 
