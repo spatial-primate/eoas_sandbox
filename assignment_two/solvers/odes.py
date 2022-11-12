@@ -65,6 +65,7 @@ def calculate_flux_terms(
 ):
     """
     created this function because python is weird about importing constants sometimes
+    (see volcano and snowball blocks below)
     :param time: float
     :param temperatures: np.array((6,))
     :param temperature_prefactor:
