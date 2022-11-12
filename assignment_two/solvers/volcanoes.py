@@ -3,7 +3,6 @@ from data.constants import albedo_snowball, albedo_not_snowball
 
 
 # volcanic_clouds causes change to albedo_sky (increase) and adds trapping to flux_out
-
 def volcanic_clouds(yr, model, onset=10, duration=2):
     """
     Function defining the changes produced by onset of volcanic activity
