@@ -24,7 +24,7 @@ def volcanic_clouds(yr, model, onset=10, duration=2):
         albedo_sky = np.array([0.2, 0.2, 0.2, 0.2, 0.2, 0.2]) * 4
     else:
         raise ValueError(
-            "please check that volcano model is one of [None, 'small', medium', 'large']"
+            "please check that volcano model is one of [None, 'small', 'medium', 'large']"
         )
 
     return albedo_sky
