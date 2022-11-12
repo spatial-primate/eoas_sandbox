@@ -41,7 +41,8 @@ def snowball_surface(temperatures: np.ndarray):
     albedo_surface: (1 by 6) vector of surface reflectance based off temperature
     """
     # loop through the 6 temperatures, if < 0 deg C, all ice, otherwise 70% water 30% land
-    temperatures = np.array([270, 270, 270, 280, 280, 280])
+    # testing:
+    # temperatures = np.array([270, 270, 270, 280, 280, 280])
     ice = (temperatures < 273.15) * albedo_snowball  # boolean of whether temps are < 0
     not_ice = (temperatures > 273.15) * albedo_not_snowball
 

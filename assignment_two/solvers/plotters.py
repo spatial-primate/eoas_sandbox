@@ -2,19 +2,18 @@ import time
 import matplotlib.pyplot as plt
 from scipy.integrate import solve_ivp
 from solvers.odes import dtemperature_dtime
-# from mycolorpy import colorlist as mcp
 import numpy as np
 
 
 def plot_integrator_results(title_string, filename_string, args: tuple):
     # Time interval for integration
-    years = 20
+    years = 50
     t_min = 0
     t_max = years * 3.154e+7  # seconds in a year (multiplied by years)
 
     max_step = 50000  # dial max_step down for stiff problems
     initial_temperatures, coefficients, compute_couplings, \
-        volcano_model, volcano_onset, volcano_duration, solvers, snowball_scenario = args
+        volcano_model, volcano_onset, volcano_duration, solvers, snowball_scenario, save_figure = args
 
     y0_reshaped = initial_temperatures.reshape(6)
 
@@ -57,7 +56,8 @@ def plot_integrator_results(title_string, filename_string, args: tuple):
     plt.tight_layout()
 
     fig_filename = "plots/" + filename_string + ".png"
-    # plt.savefig(fig_filename, bbox_inches='tight')
+    if save_figure:
+        plt.savefig(fig_filename, bbox_inches='tight')
     plt.show()
 
 

@@ -2,18 +2,19 @@ import numpy as np
 from solvers.plotters import plot_integrator_results
 
 # model configuration
-title_string = r'Average/snowball earth, coupling'
+title_string = r'Average temperature today with snowball albedo, coupling and large volcanic forcing'
 filename_string = "coupling_n50_deg_snowball"
-celsius0 = 0  # human-readable initial temperature
+save_figure = False
+celsius0 = 15  # human-readable initial temperature
 initial_temperatures = (celsius0 + 273) * np.ones((6,))  # avg temp today: 15degC
 coefficients = np.ones((6,))
 solvers = ['LSODA']  # 'DOP853', cut-paste if desired
 compute_couplings = True
-snowball_scenario = False
+snowball_scenario = True
 # volcano options
 volcano_model = 'large'  # can iterate over [None, 'small', 'medium', 'large']
-volcano_onset = 0  # in years after start
-volcano_duration = 15  # in years
+volcano_onset = 5  # in years after start
+volcano_duration = 30  # in years
 
 
 # todo: unequal zone selection
@@ -33,7 +34,8 @@ def main():
                                 initial_temperatures, coefficients,
                                 compute_couplings,
                                 volcano_model, volcano_onset, volcano_duration,
-                                solvers, snowball_scenario
+                                solvers, snowball_scenario,
+                                save_figure
                                 )
                             )
     return
