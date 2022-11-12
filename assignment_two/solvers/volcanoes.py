@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 from data.constants import albedo_snowball, albedo_not_snowball
 
 
@@ -43,7 +42,7 @@ def snowball_surface(temperatures: np.ndarray):
     # loop through the 6 temperatures, if < 0 deg C, all ice, otherwise 70% water 30% land
     # testing:
     # temperatures = np.array([270, 270, 270, 280, 280, 280])
-    ice = (temperatures < 273.15) * albedo_snowball  # boolean of whether temps are < 0
+    ice = (temperatures <= 273.15) * albedo_snowball  # boolean of whether temps are < 0
     not_ice = (temperatures > 273.15) * albedo_not_snowball
 
     return ice + not_ice

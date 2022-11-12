@@ -1,14 +1,17 @@
-from solvers.volcanoes import volcanic_clouds
-from solvers.volcanoes import snowball_surface
+from solvers.volcanoes import volcanic_clouds, snowball_surface
 from data.constants import *
+# todo: unequal zones parameters (read from file?)
 
 
-def dtemperature_dtime(time: float, temperatures: np.ndarray,
-                       volcano_model=None, volcano_onset=10, volcano_duration=2,
-                       compute_couplings=False, snowball_scenario=False):
+def dtemperature_dtime(
+        time: float, temperatures: np.ndarray,
+        volcano_model=None, volcano_onset=10, volcano_duration=2,
+        compute_couplings=False, snowball_scenario=False,
+        unequal_zones=False
+):
     """
     inputs:
-    t: scalar time, y'know?
+    time: scalar time, y'know?
     temperatures: zonally-averaged surface temperature (1 by 6)
     volcano_model: reference model of volcanic forcing
     volcano_onset: start time for volcano (years)
@@ -19,12 +22,6 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
     returns:
     dtemperature_dtime: (1 by 6) vector of changes to temperature
     """
-    # compute pre-factor on temperature term
-    # sigma and tau are constant, epsilon usually just 1 (one)
-    b = sigma * tau * epsilon
-
-    noncoupling_prefactors = np.divide(1,
-                                       densities * thermals * specific_heats)
 
     if compute_couplings:  # include heat transfer between zones
         coupling_prefactors = np.divide(1,
@@ -45,17 +42,12 @@ def dtemperature_dtime(time: float, temperatures: np.ndarray,
                                 volcano_model,
                                 volcano_onset,
                                 volcano_duration,
-                                snowball_scenario
+                                snowball_scenario,
+                                unequal_zones
                                 )
-    dtemperature = noncoupling_prefactors * flux + couplings
 
-    return dtemperature
-
-
-# for debugging standalone
-# time = 1.0
-# temperature0 = np.zeros((6,))
-# dtemperature_dtime(time, temperature0, compute_couplings=True)
+    # return dtemperature_dtime
+    return noncoupling_prefactors * flux + couplings
 
 
 def calculate_flux_terms(time, temperatures,
@@ -64,11 +56,14 @@ def calculate_flux_terms(time, temperatures,
                          volcano_model=None,
                          volcano_onset=10,
                          volcano_duration=2,
-                         snowball_scenario=False
+                         snowball_scenario=False,
+                         unequal_zones=False
                          ):
+    if unequal_zones:
+        pd.read_csv()  # todo: how do you wanna do this?
 
     # volcano-climate interaction by adding volcanic clouds to change albedo_sky
-    if volcano_model is not None\
+    if volcano_model is not None \
             and (volcano_onset * 3.154e+7) <= time <= ((volcano_onset + volcano_duration) * 3.154e+7):
         albedo_sky = volcanic_clouds(time, model=volcano_model)
     else:
@@ -80,7 +75,7 @@ def calculate_flux_terms(time, temperatures,
     else:
         albedo_surface = ALBEDO_SURFACE
 
-    # Update values for fluxes from new temperatures:
+    # update values for fluxes from new temperatures:
     step1 = np.multiply(gamma.reshape(6), (1 - albedo_sky))
     step2 = np.multiply(step1, (1 - albedo_surface))
     flux_in = np.multiply(step2, S_0)
