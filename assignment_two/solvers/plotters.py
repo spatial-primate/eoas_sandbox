@@ -14,8 +14,8 @@ def plot_integrator_results(title_string, filename_string, args: tuple):
     max_step = 50000  # dial max_step down for stiff problems
     # unpack args to pass to solver, dT/dt, and plotter
     initial_temperatures, coefficients, compute_couplings, \
-    volcano_model, volcano_onset, volcano_duration, solvers, \
-    snowball_scenario, unequal_zones, save_figure = args
+        volcano_model, volcano_onset, volcano_duration, solvers, \
+        snowball_scenario, unequal_zones, save_figure = args
 
     y0_reshaped = initial_temperatures.reshape(6)
 
