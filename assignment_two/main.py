@@ -27,6 +27,7 @@ def main():
         1. uncoupled six-zone system with equal latitude spacing
         2. heat transfer coupled six-zone system with gulf stream
         3. volcanic forcing on climate
+        # todo:
         4. modified definition for arctic circle (75 degrees)
     :return:
     figures showing time evolution of system
