@@ -5,7 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/assignment_one_reference" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/assignment_two" isTestSource="false" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="pycwt" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

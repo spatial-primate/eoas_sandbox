@@ -9,7 +9,7 @@ sns.set_theme(style="white")
 # sns.color_palette("Paired")
 # plt.rcParams['text.usetex'] = True
 
-# steady-state volcanic plume model (MTT 1973ish)
+# steady-state volcanic plume model (MTT 1956)
 # demonstrates role of entrainment velocity parametrization
 
 # todo: fix normalizations
@@ -29,6 +29,7 @@ v0 = 0.0  # m/s
 
 # depends strongly on plume mixture density
 f0 = reduced_gravity * w0  # m**4/s**3
+# f0 = 1.
 
 altitude_span = np.linspace(0, 100., 100)  # meters (hydrostatic scale height)
 initial_conditions = np.array([w0, v0, f0])  # upward velocity, horizontal velocity, buoyancy flux (heat flux)
@@ -53,7 +54,10 @@ def dy_dz(height, x, mtt_entrainment=0.11, f_z=False):
     # todo: generate (rho_0 - rho) for plotting NBH
     return np.array([2 * mtt_entrainment * x[1],  # ** (1 / 4),  # dw/dz
                      4 * x[2] * x[0],  # dv/dz
-                     -buoyancy_frequency * x[0]])  # df/dz buoyancy_frequency already squared
+                     -2 * buoyancy_frequency * x[0]])  # df*/dz buoyancy_frequency already squared
+    # return np.array([x[1],  # dw/dz
+    #                  x[2] * x[0],  # dv/dz
+    #                  -x[0]])  # df*/dz buoyancy_frequency already squared
 
 
 # solve ODE system for velocity and buoyancy flux
