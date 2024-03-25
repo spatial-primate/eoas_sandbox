@@ -1,3 +1,5 @@
+import os
+
 import PIL
 import numpy as np
 from matplotlib import pyplot as plt
@@ -15,7 +17,21 @@ def main():
     grims_mid_file = r'/Users/lukebrown/Downloads/grimsvotn_middle.png'
     grims_end_file = r'/Users/lukebrown/Downloads/grimsvotn_end.png'
     eyja_end_file = r'/Users/lukebrown/Downloads/eyja_end.png'
-    filenames = [grims_mid_file, grims_end_file, eyja_end_file]
+    new_volcano_file = r"/Users/lukebrown/Downloads/image39.png"
+    another_volcano_file = r"/Users/lukebrown/Downloads/image41.png"
+    yet_another_file = r"/Users/lukebrown/Downloads/image53.png"
+    yet_yet_another_file = r"/Users/lukebrown/Downloads/image28.png"
+    yet_yet_yet_file = r"/Users/lukebrown/Downloads/image32.png"
+    tonga_end_file = r"/Users/lukebrown/Downloads/image66.png"
+    filenames = [
+        grims_mid_file, grims_end_file, eyja_end_file,
+        new_volcano_file,
+        another_volcano_file,
+        yet_another_file,
+        yet_yet_another_file,
+        yet_yet_yet_file,
+        tonga_end_file
+    ]
 
     title = 'Grims & Eyja Spectra'
     eruption_spectra = []
@@ -24,6 +40,8 @@ def main():
         # stage = 'End'  # beginning, middle, end
         if 'eyja' in filename:
             eruption_name = 'Eyja End'
+        elif 'image' in filename:
+            eruption_name = os.path.basename(filename).split('.')[0]
         else:
             if 'middle' in filename:
                 eruption_name = 'Grimsvötn Middle'
@@ -53,7 +71,7 @@ def main():
             # todo: pairing TGSD
             # eyja refs: magnusson et al 2010/12? Gudmundsson et al 2012
             # grims: prata separation of ash and so2; ash clouds at different heights --> H*
-            gray_section_vertical = gray_image[:, gray_image.shape[0] // 2 - 80:gray_image.shape[0] // 2 + 30]
+            gray_section_vertical = gray_image[:, gray_image.shape[0] // 2 - 30:gray_image.shape[0] // 2 + 30]
 
         gray_profile_x = np.mean(gray_section_vertical, axis=1)
 
@@ -128,7 +146,7 @@ def main():
     ax.legend(loc='upper right')
     ax.set_title(f"{title}")
     plt.tight_layout()
-    plt.savefig(f"../figures/{title} kolmogorov.png", dpi=300)
+    # plt.savefig(f"../figures/{title} kolmogorov.png", dpi=300)
     plt.show()
 
     return

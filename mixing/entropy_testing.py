@@ -19,10 +19,10 @@ sns.set_theme("notebook")
     a. use peak_local_max to create markers
 4. tapering: "tukey" versus "hanning" [X]
 """
-# grimsvotn_filname = r'/Users/lukebrown/Downloads/grimsvotn_middle.png'
-grimsvotn_filname = r'/Users/lukebrown/Downloads/grimsvotn_end.png'
+grimsvotn_filname = r'/Users/lukebrown/Downloads/grimsvotn_middle.png'
+grimsvotn_filname_end = r'/Users/lukebrown/Downloads/grimsvotn_end.png'
 eyja_filename = r'/Users/lukebrown/Downloads/eyja_end.png'
-filenames = [grimsvotn_filname, eyja_filename]
+filenames = [grimsvotn_filname, grimsvotn_filname_end, eyja_filename]
 
 
 def analyze_eruption(
