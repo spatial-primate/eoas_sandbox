@@ -33,7 +33,7 @@ def main():
         tonga_end_file
     ]
 
-    title = 'Grims & Eyja Spectra'
+    title = 'Eruption Spectra'
     eruption_spectra = []
     eruption_names = []
     for filename in filenames:
