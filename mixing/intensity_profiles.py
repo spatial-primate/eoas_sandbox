@@ -14,6 +14,7 @@ sns.set_theme(style="dark")
 
 # don't worry about changing billow sizes... yet!
 def main():
+    # todo make this smarter
     grims_mid_file = r'/Users/lukebrown/Downloads/grimsvotn_middle.png'
     grims_end_file = r'/Users/lukebrown/Downloads/grimsvotn_end.png'
     eyja_end_file = r'/Users/lukebrown/Downloads/eyja_end.png'
@@ -24,7 +25,9 @@ def main():
     yet_yet_yet_file = r"/Users/lukebrown/Downloads/image32.png"
     tonga_end_file = r"/Users/lukebrown/Downloads/image66.png"
     filenames = [
-        grims_mid_file, grims_end_file, eyja_end_file,
+        grims_mid_file,
+        grims_end_file,
+        eyja_end_file,
         new_volcano_file,
         another_volcano_file,
         yet_another_file,
@@ -132,8 +135,10 @@ def main():
         print(f"lowest max frequency = {np.argmax(spectrum)}")
 
     kolmogorov_linear = np.log(frequencies_x[4:-1]) * (-5 / 3)
+    obi_linear = np.log(frequencies_x[4:-1]) * (-11 / 3)
     ax.semilogx(frequencies_x[4:-1], kolmogorov_linear - 3.33, 'r', linestyle='dotted', label='kolmogorov -5/3')
     ax.semilogx(frequencies_x[4:-1], kolmogorov_linear - 8, 'r', linestyle='dotted')
+    ax.semilogx(frequencies_x[4:-1], obi_linear - 10, linestyle='dotted', label='obi -11/3')
     # todo: how to interpret hilbert results
     # ax[1].semilogx(
     #     psd_x_hilbert / psd_x_hilbert.max(),
