@@ -18,11 +18,19 @@ sns.set_theme("notebook")
 3. stretch using darks and lights (start with 2 categories and work up)
     a. use peak_local_max to create markers
 4. tapering: "tukey" versus "hanning" [X]
+5. for plume experiments:
+    a. use image negative to make subject bright
+    b. use clear liquid ambient, dyed plume
 """
-grimsvotn_filname = r'/Users/lukebrown/Downloads/grimsvotn_middle.png'
-grimsvotn_filname_end = r'/Users/lukebrown/Downloads/grimsvotn_end.png'
-eyja_filename = r'/Users/lukebrown/Downloads/eyja_end.png'
-filenames = [grimsvotn_filname, grimsvotn_filname_end, eyja_filename]
+grimsvotn_filname = r'/Users/lukebrown/Desktop/Screenshot 2024-04-10 at 9.02.09 AM.png'
+# grimsvotn_filname = r'/Users/lukebrown/Downloads/grimsvotn_middle.png'
+# grimsvotn_filname_end = r'/Users/lukebrown/Downloads/grimsvotn_end.png'
+# eyja_filename = r'/Users/lukebrown/Downloads/eyja_end.png'
+filenames = [
+    grimsvotn_filname,
+    # grimsvotn_filname_end,
+    # eyja_filename
+]
 
 
 def analyze_eruption(
@@ -42,7 +50,7 @@ def analyze_eruption(
     entropy_measure = skimage.filters.rank.entropy(gray_image, footprint)
 
     # otsu threshold
-    thresholds = filters.threshold_multiotsu(entropy_measure, classes=2)
+    thresholds = filters.threshold_multiotsu(entropy_measure, classes=4)
     regions = np.digitize(entropy_measure, bins=thresholds)
     regions = closing(regions, footprint)  # closing dark spots inside regions
     eruption_mask = gray_image * regions
@@ -119,14 +127,14 @@ for eruption, image_file in zip(volcano_log.keys(), filenames):
 fig, ax = plt.subplots(nrows=2, sharex=True, figsize=(10, 5))
 for eruption in volcano_log.keys():
     ax[0].semilogx(volcano_log[eruption]['power_spectrum'][0],
-               volcano_log[eruption]['power_spectrum'][2].mean(axis=1),
-               label=eruption, linestyle='dotted')
+                   volcano_log[eruption]['power_spectrum'][2].mean(axis=1),
+                   label=eruption, linestyle='dotted')
     ax[0].set_title('Power Spectrum (X axis)')
     ax[0].set_ylabel('Power')
     ax[0].grid(True)
     ax[1].semilogx(volcano_log[eruption]['power_spectrum'][0],
-               volcano_log[eruption]['power_spectrum'][3].mean(axis=0).T,
-               label=eruption, linestyle='dotted')
+                   volcano_log[eruption]['power_spectrum'][3].mean(axis=0).T,
+                   label=eruption, linestyle='dotted')
     ax[1].set_title('Power Spectrum (Y axis)')
     ax[1].set_xlabel('Frequency')
     ax[1].set_ylabel('Power')

@@ -6,8 +6,7 @@ from particle_plumes import ParticlePlume as Plume
 
 sns.set_theme(style="whitegrid")
 
-# todo: tabulate plume experiments into a csv
-experiments = pd.read_csv('plume_experiments_e514.csv')
+experiments = pd.read_csv('plume_experiments_e514_no_video_file.csv')
 
 plumes = []
 for index, experiment in experiments.iterrows():
@@ -15,7 +14,10 @@ for index, experiment in experiments.iterrows():
         Plume(trial=experiment['trial'],
               multiphase=experiment['multiphase [-]'],
               diameter=experiment['particle_diameter (m)'],
-              mixture_density=experiment['mixture_density (kg/m3)']
+              mixture_density=experiment['mixture_density (kg/m3)'],
+              cloud_height=experiment['H* [-]'],
+              overshoot_height=experiment['h_overshoot (m)'],
+              # video_file=experiment['video_file'],
               )
     )
 

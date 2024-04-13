@@ -16,24 +16,24 @@ sns.set_theme(style="dark")
 def main():
     # todo make this smarter
     grims_mid_file = r'/Users/lukebrown/Downloads/grimsvotn_middle.png'
-    grims_end_file = r'/Users/lukebrown/Downloads/grimsvotn_end.png'
-    eyja_end_file = r'/Users/lukebrown/Downloads/eyja_end.png'
+    # grims_end_file = r'/Users/lukebrown/Downloads/grimsvotn_end.png'
+    # eyja_end_file = r'/Users/lukebrown/Downloads/eyja_end.png'
     new_volcano_file = r"/Users/lukebrown/Downloads/image39.png"
     another_volcano_file = r"/Users/lukebrown/Downloads/image41.png"
-    yet_another_file = r"/Users/lukebrown/Downloads/image53.png"
-    yet_yet_another_file = r"/Users/lukebrown/Downloads/image28.png"
-    yet_yet_yet_file = r"/Users/lukebrown/Downloads/image32.png"
-    tonga_end_file = r"/Users/lukebrown/Downloads/image66.png"
+    # yet_another_file = r"/Users/lukebrown/Downloads/image53.png"
+    # yet_yet_another_file = r"/Users/lukebrown/Downloads/image28.png"
+    # yet_yet_yet_file = r"/Users/lukebrown/Downloads/image32.png"
+    # tonga_end_file = r"/Users/lukebrown/Downloads/image66.png"
     filenames = [
         grims_mid_file,
-        grims_end_file,
-        eyja_end_file,
+        # grims_end_file,
+        # eyja_end_file,
         new_volcano_file,
         another_volcano_file,
-        yet_another_file,
-        yet_yet_another_file,
-        yet_yet_yet_file,
-        tonga_end_file
+        # yet_another_file,
+        # yet_yet_another_file,
+        # yet_yet_yet_file,
+        # tonga_end_file
     ]
 
     title = 'Eruption Spectra'
